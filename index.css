@@ -123,5 +123,17 @@ body {
   margin: 3px 0 10px;
 }
 
+.expandButton {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  font-size: 12px;
+  color: grey;
+  cursor: pointer;
+  transform: translate(-50%);
+  background-color: white;
+}
 
+.cardOpen {
+  height: 300px;
 
