@@ -1,6 +1,6 @@
 /* Step 1: using axios, send a GET request to the following URL 
            (replacing the palceholder with your Github name):
-           https://api.github.com/users/<your name>
+           https://api.github.com/users/heather-Ridgill
 */
 
 /* Step 2: Inspect and study the data coming back, this is YOUR 
@@ -53,3 +53,14 @@ const followersArray = [];
   luishrd
   bigknell
 */
+
+axios
+  .get(`https://api.github.com/users/Heather-Ridgill`)
+  .then(data => {
+    console.log("Success!", data);
+    const cards = document.querySelector(".cards");
+    cards.appendChild(createCard(data.data));
+  })
+  .catch(err => {
+    console.log("Error: ", err);
+  });
