@@ -1,7 +1,18 @@
 /* Step 1: using axios, send a GET request to the following URL 
            (replacing the palceholder with your Github name):
-           https://api.github.com/users/<your name>
+           https://api.github.com/users/heather-Ridgill
 */
+const me = axios.get(`https://api.github.com/users/Heather-Ridgill`);
+
+console.log(me);
+// .then(data => {
+//   console.log("Success!", data);
+//   const cards = document.querySelector(".cards");
+//   cards.appendChild(createCard(data.data));
+// })
+// .catch(err => {
+//   console.log("Error: ", err);
+// });
 
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
@@ -14,6 +25,14 @@
            create a new component and add it to the DOM as a child of .cards
 */
 
+me.then(gitHubData => {
+  const userCard = cardHolder(gitHubData);
+  const cardsContainer = document.querySelector(".cards");
+  cardsContainer.appendChild(userCard);
+}).catch(err => {
+  console.log("ERROR: ", err);
+});
+
 /* Step 5: Now that you have your own card getting added to the DOM, either 
           follow this link in your browser https://api.github.com/users/<Your github name>/followers 
           , manually find some other users' github handles, or use the list found 
@@ -24,7 +43,42 @@
           user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+const followersArray = [
+  "MicahJank",
+  "meholt",
+  "Yaretas",
+  "sablemadison",
+  "ashbenj",
+  "dmunter2",
+  "larynab"
+];
+
+followersArray.forEach(follower => {
+  axios
+    .get(`https://api.github.com/users/${follower}`)
+    .then(data => {
+      // console.log("Follower info: ", data.data);
+      const cards2 = document.querySelector(".cards");
+      cards2.appendChild(cardHolder(data));
+    })
+    .catch(err => {
+      console.log("Could not retrieve follower info: ", err);
+    });
+});
+
+// axios
+//   .get(`https://api.github.com/users/tetondan`)
+//   .then(data => {
+//     console.log("Here is the list of your followers: ", data.data);
+//     const followersData = data.data;
+//     followersData.forEach(followerData => {
+//       followersArray.push(followerData.login);
+//     });
+//   })
+
+// .catch(err => {
+//   console.log("There was a problem retrieving your list of followers: ", err);
+// });
 
 /* Step 3: Create a function that accepts a single object as its only argument,
           Using DOM methods and properties, create a component that will return the following DOM element:
@@ -46,6 +100,71 @@ const followersArray = [];
 
 */
 
+function cardHolder(obj) {
+  let Maincard = document.createElement("div");
+  Maincard.classList.add("card");
+
+  //pics img tag
+  let cardPic = document.createElement("img");
+  cardPic.setAttribute("src", obj.data.avatar_url);
+  Maincard.appendChild(cardPic);
+
+  //main info card-tag
+  let cardDetails = document.createElement("div");
+  cardDetails.classList.add("card-info");
+  Maincard.appendChild(cardDetails);
+
+  //persons name h3 tag
+  let cardName = document.createElement("h3");
+  cardName.classList.add("name");
+  cardName.textContent = obj.data.name;
+  cardDetails.appendChild(cardName);
+
+  //user name p tag
+  let cardUserName = document.createElement("p");
+  cardUserName.classList.add("username");
+  cardUserName.textcontent = obj.data.login;
+  cardDetails.appendChild(cardUserName);
+
+  //location p tag
+  let cardloc = document.createElement("p");
+  cardloc.textContent = `Location: ${obj.data.location}`;
+  cardDetails.appendChild(cardloc);
+
+  //link to githubs a tag
+  let cardAnchor = document.createElement("a");
+  cardAnchor.setAttribute("href", "obj.data.html_url");
+  cardAnchor.textContent = obj.data.html_url;
+
+  //profile p tag
+  let cardProfile = document.createElement("p");
+  cardProfile.textContent = `Profile`;
+  cardDetails.appendChild(cardProfile);
+  cardDetails.appendChild(cardAnchor);
+
+  //followers p tag
+  let cardFollowers = document.createElement("p");
+  cardFollowers.textContent = `Followers: ${obj.data.followers}`;
+  cardDetails.appendChild(cardFollowers);
+
+  //following p tag
+  let cardFollowing = document.createElement("p");
+  cardFollowers.textContent = `Following: ${obj.data.following}`;
+  cardDetails.appendChild(cardFollowing);
+
+  //bio  p tag
+  let cardBio = document.createElement("p");
+  cardBio.textContent = `Bio: ${obj.data.bio}`;
+  cardDetails.appendChild(cardBio);
+
+  //create expand button
+  let cardExpand = document.createElement("span");
+  cardExpand.textContent = "Open / Close";
+  cardExpand.classList.add("expandButton");
+  cardDetails.appendChild(cardExpand);
+
+  return Maincard;
+}
 /* List of LS Instructors Github username's: 
   tetondan
   dustinmyers
